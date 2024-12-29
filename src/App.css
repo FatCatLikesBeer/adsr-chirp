@@ -5,3 +5,41 @@
   text-align: center;
 }
 
+.module_amp {
+  display: flex;
+  flex-direction: column;
+  width: 10rem;
+  border: 0.02rem solid rebeccapurple;
+  padding: 1rem;
+}
+
+.module_title {
+  padding: 0;
+  margin: 0;
+}
+
+.vertical_slider {
+  -moz-appearance: slider-vertical;
+  -webkit-appearance: slider-vertical;
+}
+
+.vertical_slider_board {
+  display: flex;
+  justify-content: space-between;
+}
+
+.vertical_slider_container {
+  display: flex;
+  flex-direction: column;
+  width: 2.3rem;
+}
+
+.slider_value {
+  padding: 0;
+  margin: 0;
+  font-size: 0.75rem;
+}
+
+.slider_label {
+  margin: 0;
+}

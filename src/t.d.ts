@@ -1,0 +1,3 @@
+interface InstrumentOneParams {
+  ampADSR: number[];
+}
