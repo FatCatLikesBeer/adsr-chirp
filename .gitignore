@@ -25,3 +25,7 @@ dist-ssr
 
 # Dont env files
 *.env
+
+# keys
+10.0.0.10+2*
+

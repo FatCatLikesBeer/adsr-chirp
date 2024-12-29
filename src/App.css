@@ -10,17 +10,19 @@
   flex-direction: column;
   width: 10rem;
   border: 0.02rem solid rebeccapurple;
-  padding: 1rem;
+  padding: 0.8rem 1rem 1rem;
 }
 
 .module_title {
-  padding: 0;
+  padding: 0 0 0.3rem;
   margin: 0;
 }
 
 .vertical_slider {
-  -moz-appearance: slider-vertical;
-  -webkit-appearance: slider-vertical;
+  /*-moz-appearance: slider-vertical;*/
+  /*-webkit-appearance: slider-vertical;*/
+  writing-mode: vertical-lr;
+  direction: rtl;
 }
 
 .vertical_slider_board {

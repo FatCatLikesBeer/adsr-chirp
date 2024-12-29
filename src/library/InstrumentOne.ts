@@ -7,10 +7,12 @@ export default class InstrumentOne {
   duration: number;
 
   constructor({
-    ampADSR: [],
+    instrumentParams,
+    setDisableButton,
   }: {
-    ampADSR: number[],
-  }, setDisableButton: React.Dispatch<boolean>) {
+    instrumentParams: InstrumentOneParams,
+    setDisableButton: React.Dispatch<boolean>
+  }) {
     this.duration = 4;
     this.audioCtx = new AudioContext;
     this.amp = this.audioCtx.createGain();
@@ -22,22 +24,29 @@ export default class InstrumentOne {
     this.osc.connect(this.amp);
     this.lfo.connect(this.lfoAmp);
     this.lfoAmp.connect(this.osc.frequency);
-
-    this.amp.gain.value = 0.1;
+    this.amp.gain.value = 0.0;
 
     this.osc.type = "sine";
-    this.osc.frequency.value = 680;
+    this.osc.frequency.value = 440;
 
     this.lfo.type = "sine";
     this.lfo.frequency.value = 11.0;
 
+    // Total range (amplitude height) of LFO modulation
     this.lfoAmp.gain.value = 110;
 
     this.lfo.start();
     this.osc.start();
-    this.osc.frequency.setValueCurveAtTime([380, 300, 200, 190], this.audioCtx.currentTime, this.audioCtx.currentTime + 4);
+
+    this.amp.gain.setTargetAtTime(0.3, 0, this.audioCtx.currentTime + instrumentParams.ampADSR[0]);
+
     this.lfo.stop(this.audioCtx.currentTime + this.duration);
     this.osc.stop(this.audioCtx.currentTime + this.duration);
+
     this.osc.onended = function() { setDisableButton(false) }
+  }
+
+  stop() {
+    this.osc.stop();
   }
 }
