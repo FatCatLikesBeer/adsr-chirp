@@ -10,7 +10,6 @@ export default function InstrumentOneUi() {
   function createPlayKill() {
     instrument?.stop();
     setInstrument(new InstrumentOne({ instrumentParams, setDisableButton }));
-    console.log(instrumentParams.ampADSR);
   }
 
   function killOsc() {
