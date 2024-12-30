@@ -19,18 +19,19 @@ export default function AmpEnvelope({
           }
 
           return (
-            <div className="vertical_slider_container">
-              <p className="slider_value">{elem.toFixed(2)}</p>
+            <div className="vertical_slider_container" key={`${labels[i]}vertical_slider_ctonainer`}>
+              <p className="slider_value" key={`${labels[i]}slider_value`}>{elem.toFixed(2)}</p>
               <input
+                key={`${labels[i]}vertical_slider`}
                 className="vertical_slider"
                 type="range"
                 value={elem}
                 min="0"
-                max="5"
+                max="10"
                 step="0.01"
                 onChange={handleValueChange}
               />
-              <h3 className="slider_label">{labels[i]}</h3>
+              <h3 className="slider_label" key={`${labels[i]}slider_label`}>{labels[i]}</h3>
             </div>
           );
         })}

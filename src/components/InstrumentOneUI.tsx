@@ -10,13 +10,22 @@ export default function InstrumentOneUi() {
   function createPlayKill() {
     instrument?.stop();
     setInstrument(new InstrumentOne({ instrumentParams, setDisableButton }));
+    console.log(instrumentParams.ampADSR);
+  }
+
+  function killOsc() {
+    instrument?.stop();
+  }
+
+  function release() {
+    instrument?.release();
   }
 
   return (
     <div>
       <AmpEnvelope instrumentParams={instrumentParams} setInstrumentParams={setInstrumentParams} />
-      <button type="button" onClick={createPlayKill} disabled={disableButton}>Play</button>
-      <button type="button" onClick={() => { instrument?.stop() }} disabled={disableButton}>Stop</button>
+      <button type="button" onMouseDown={createPlayKill} onMouseUp={release} disabled={disableButton}>Play</button>
+      <button type="button" onClick={killOsc} disabled={disableButton}>Stop</button>
     </div>
-  )
+  );
 }

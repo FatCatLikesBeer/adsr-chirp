@@ -1,10 +1,11 @@
 export default class InstrumentOne {
   audioCtx: AudioContext;
+  ampDestination: GainNode;
   amp: GainNode;
   osc: OscillatorNode;
   lfo: OscillatorNode;
   lfoAmp: GainNode;
-  duration: number;
+  instrumentParams: InstrumentOneParams;
 
   constructor({
     instrumentParams,
@@ -13,17 +14,21 @@ export default class InstrumentOne {
     instrumentParams: InstrumentOneParams,
     setDisableButton: React.Dispatch<boolean>
   }) {
-    this.duration = 4;
     this.audioCtx = new AudioContext;
+    this.ampDestination = this.audioCtx.createGain();
     this.amp = this.audioCtx.createGain();
     this.osc = this.audioCtx.createOscillator();
     this.lfo = this.audioCtx.createOscillator();
     this.lfoAmp = this.audioCtx.createGain();
+    this.instrumentParams = instrumentParams;
 
-    this.amp.connect(this.audioCtx.destination);
+    this.ampDestination.connect(this.audioCtx.destination);
+    this.amp.connect(this.ampDestination);
     this.osc.connect(this.amp);
     this.lfo.connect(this.lfoAmp);
     this.lfoAmp.connect(this.osc.frequency);
+    this.ampDestination.gain.value = 0.03;
+
     this.amp.gain.value = 0.0;
 
     this.osc.type = "sine";
@@ -38,15 +43,22 @@ export default class InstrumentOne {
     this.lfo.start();
     this.osc.start();
 
-    this.amp.gain.setTargetAtTime(0.3, 0, this.audioCtx.currentTime + instrumentParams.ampADSR[0]);
-
-    this.lfo.stop(this.audioCtx.currentTime + this.duration);
-    this.osc.stop(this.audioCtx.currentTime + this.duration);
+    // Attack
+    this.amp.gain.setTargetAtTime(10, 0, this.audioCtx.currentTime + this.instrumentParams.ampADSR[0]);
+    // Decay then Sustain
+    this.amp.gain.setTargetAtTime(this.instrumentParams.ampADSR[2], this.audioCtx.currentTime + this.instrumentParams.ampADSR[0], (this.instrumentParams.ampADSR[1] * .25));
 
     this.osc.onended = function() { setDisableButton(false) }
   }
 
+  release() {
+    // release
+    this.amp.gain.cancelScheduledValues(this.audioCtx.currentTime);
+    this.amp.gain.setTargetAtTime(0, this.audioCtx.currentTime, (this.instrumentParams.ampADSR[3] * .25));
+  }
+
   stop() {
+    this.lfo.stop();
     this.osc.stop();
   }
 }
