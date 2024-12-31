@@ -9,10 +9,8 @@ export default class InstrumentOne {
 
   constructor({
     instrumentParams,
-    setDisableButton,
   }: {
     instrumentParams: InstrumentOneParams,
-    setDisableButton: React.Dispatch<boolean>
   }) {
     this.audioCtx = new AudioContext;
     this.ampDestination = this.audioCtx.createGain();
@@ -44,17 +42,15 @@ export default class InstrumentOne {
     this.osc.start();
 
     // Attack
-    this.amp.gain.setTargetAtTime(10, 0, this.audioCtx.currentTime + this.instrumentParams.ampADSR[0]);
+    this.amp.gain.setTargetAtTime(10, 0, this.instrumentParams.ampADSR[0]);
     // Decay then Sustain
     this.amp.gain.setTargetAtTime(this.instrumentParams.ampADSR[2], this.audioCtx.currentTime + this.instrumentParams.ampADSR[0], (this.instrumentParams.ampADSR[1] * .25));
-
-    this.osc.onended = function() { setDisableButton(false) }
   }
 
   release() {
     // release
     this.amp.gain.cancelScheduledValues(this.audioCtx.currentTime);
-    this.amp.gain.setTargetAtTime(0, this.audioCtx.currentTime, (this.instrumentParams.ampADSR[3] * .25));
+    this.amp.gain.exponentialRampToValueAtTime(0.01, this.audioCtx.currentTime + this.instrumentParams.ampADSR[3]);
   }
 
   stop() {

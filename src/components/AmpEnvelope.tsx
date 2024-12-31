@@ -8,13 +8,22 @@ export default function AmpEnvelope({
 
   return (
     <div className="module_amp">
-      <h3 className="module_title">AMP ENVELOPE</h3>
+      <div className="module_header">
+        <h3 className="module_title">OSC 1 AMP ENVELOPE</h3>
+        <span className="module_info"></span>
+      </div>
       <div className="vertical_slider_board">
         {instrumentParams.ampADSR.map((elem, i, thisArr) => {
 
           function handleValueChange(event: React.ChangeEvent<HTMLInputElement>) {
             let newampADSR = [...thisArr];
             newampADSR[i] = Number(event.target.value);
+            setInstrumentParams({ ampADSR: [...newampADSR] });
+          }
+
+          function defaultParam() {
+            let newampADSR = [...thisArr];
+            newampADSR[i] = 1;
             setInstrumentParams({ ampADSR: [...newampADSR] });
           }
 
@@ -31,7 +40,11 @@ export default function AmpEnvelope({
                 step="0.01"
                 onChange={handleValueChange}
               />
-              <h3 className="slider_label" key={`${labels[i]}slider_label`}>{labels[i]}</h3>
+              <h3
+                className="slider_label"
+                key={`${labels[i]}slider_label`}
+                onDoubleClick={defaultParam}
+              >{labels[i]}</h3>
             </div>
           );
         })}
