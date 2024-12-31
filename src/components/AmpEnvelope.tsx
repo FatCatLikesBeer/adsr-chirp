@@ -1,5 +1,6 @@
 export default function AmpEnvelope({
-  instrumentParams, setInstrumentParams
+  instrumentParams,
+  setInstrumentParams,
 }: {
   instrumentParams: InstrumentOneParams,
   setInstrumentParams: React.Dispatch<InstrumentOneParams>,
@@ -13,18 +14,18 @@ export default function AmpEnvelope({
         <span className="module_info"></span>
       </div>
       <div className="vertical_slider_board">
-        {instrumentParams.ampADSR.map((elem, i, thisArr) => {
+        {instrumentParams.osc1AmpEnvelope.map((elem, i) => {
 
           function handleValueChange(event: React.ChangeEvent<HTMLInputElement>) {
-            let newampADSR = [...thisArr];
-            newampADSR[i] = Number(event.target.value);
-            setInstrumentParams({ ampADSR: [...newampADSR] });
+            let newInstrumentOneParams = { ...instrumentParams };
+            newInstrumentOneParams.osc1AmpEnvelope[i] = Number(event.target.value);
+            setInstrumentParams({ ...newInstrumentOneParams });
           }
 
           function defaultParam() {
-            let newampADSR = [...thisArr];
-            newampADSR[i] = 1;
-            setInstrumentParams({ ampADSR: [...newampADSR] });
+            let newInstrumentOneParams = { ...instrumentParams };
+            newInstrumentOneParams.osc1AmpEnvelope[i] = 1;
+            setInstrumentParams({ ...newInstrumentOneParams });
           }
 
           return (

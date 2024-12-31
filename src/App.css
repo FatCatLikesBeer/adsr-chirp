@@ -16,6 +16,7 @@
 .module_title {
   padding: 0 0 0.3rem;
   margin: 0;
+  color: gold;
 }
 
 .vertical_slider {
@@ -44,4 +45,9 @@
 
 .slider_label {
   margin: 0;
+}
+
+.instrument_voice {
+  display: flex;
+  flex-direction: row;
 }
