@@ -18,15 +18,15 @@ export default function OSCOneModule({
     setInstrumentParams({ ...newInstrumentParams });
   }
 
-  function handleFrequencyChange(event: React.ChangeEvent<HTMLInputElement>) {
+  function handleOSCFrequencyChange(event: React.ChangeEvent<HTMLInputElement>) {
     let newInstrumentParams = { ...instrumentParams };
     newInstrumentParams.osc1Params.frequency = Number(event.target.value);
     setInstrumentParams({ ...newInstrumentParams });
   }
 
-  function resetFrequency() {
+  function resetOSCFrequency() {
     let newInstrumentParams = { ...instrumentParams };
-    newInstrumentParams.osc1Params.frequency = 440;
+    newInstrumentParams.osc1Params.frequency = 2000;
     setInstrumentParams({ ...newInstrumentParams });
   }
 
@@ -48,15 +48,15 @@ export default function OSCOneModule({
           </select>
         </div>
         <div>
-          <h3 className="slider_label" onDoubleClick={resetFrequency}>Frequency</h3>
+          <h3 className="slider_label" onDoubleClick={resetOSCFrequency}>Frequency</h3>
           <input
             type="range"
             value={instrumentParams.osc1Params.frequency}
             min="100"
             max="8000"
-            onChange={handleFrequencyChange}
+            onChange={handleOSCFrequencyChange}
           />
-          <p className="slider_value">{instrumentParams.osc1Params.frequency.toFixed(2)}</p>
+          <p className="slider_value">{instrumentParams.osc1Params.frequency}</p>
         </div>
       </div>
     </div>

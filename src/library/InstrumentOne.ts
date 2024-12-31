@@ -29,14 +29,14 @@ export default class InstrumentOne {
 
     this.voice1Amp.gain.value = 0.0;
 
-    this.voice1Osc.type = instrumentParams.osc1Params.type
+    this.voice1Osc.type = instrumentParams.osc1Params.type;
     this.voice1Osc.frequency.value = instrumentParams.osc1Params.frequency;
 
-    this.voice1LFO.type = "sine";
-    this.voice1LFO.frequency.value = 11.0;
+    this.voice1LFO.type = instrumentParams.osc1LFO.type;
+    this.voice1LFO.frequency.value = instrumentParams.osc1LFO.frequency;
 
     // Total range (amplitude height) of LFO modulation
-    this.voice1LFOAmp.gain.value = 110;
+    this.voice1LFOAmp.gain.value = instrumentParams.osc1LFO.amplitude;
 
     this.voice1LFO.start();
     this.voice1Osc.start();
@@ -61,5 +61,6 @@ export default class InstrumentOne {
   stop() {
     this.voice1LFO.stop();
     this.voice1Osc.stop();
+    this.audioCtx.close();
   }
 }
