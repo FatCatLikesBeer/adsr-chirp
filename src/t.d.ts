@@ -18,4 +18,9 @@ interface InstrumentOneParams {
   }
   /** ADSR/Envelope for OSC 1 Amp */
   osc1AmpEnvelope: number[];
+  osc1Filter: {
+    type: BiquadFilterType;
+    frequency: number;
+    q: number;
+  }
 }
