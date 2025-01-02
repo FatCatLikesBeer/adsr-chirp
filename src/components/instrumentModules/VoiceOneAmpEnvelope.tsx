@@ -1,4 +1,4 @@
-export default function AmpOneEnvelope({
+export default function VoiceOneAmpEnvelope({
   instrumentParams,
   setInstrumentParams,
 }: {

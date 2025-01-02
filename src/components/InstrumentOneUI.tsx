@@ -1,8 +1,8 @@
 import { useState } from "react";
-import OSCOneModule from "./instrumentModules/OSCOneModule";
-import OSCOneLFO from "./instrumentModules/OSCOneLFO";
-import AmpOneEnvelope from "./instrumentModules/AmpOneEnvelope";
 import InstrumentOne from "../library/InstrumentOne"
+import VoiceOneOSC from "./instrumentModules/VoiceOneOSC";
+import VoiceOneLFO from "./instrumentModules/VoiceOneLFO";
+import VoiceOneAmpEnvelope from "./instrumentModules/VoiceOneAmpEnvelope";
 import VoiceOneFilter from "./instrumentModules/VoiceOneFilter";
 
 export default function InstrumentOneUi() {
@@ -41,9 +41,9 @@ export default function InstrumentOneUi() {
   return (
     <div>
       <div className="instrument_voice">
-        <OSCOneModule instrumentParams={instrumentParams} setInstrumentParams={setInstrumentParams} />
-        <OSCOneLFO instrumentParams={instrumentParams} setInstrumentParams={setInstrumentParams} />
-        <AmpOneEnvelope instrumentParams={instrumentParams} setInstrumentParams={setInstrumentParams} />
+        <VoiceOneOSC instrumentParams={instrumentParams} setInstrumentParams={setInstrumentParams} />
+        <VoiceOneLFO instrumentParams={instrumentParams} setInstrumentParams={setInstrumentParams} />
+        <VoiceOneAmpEnvelope instrumentParams={instrumentParams} setInstrumentParams={setInstrumentParams} />
         <VoiceOneFilter instrumentParams={instrumentParams} setInstrumentParams={setInstrumentParams} />
       </div>
       <button type="button" onMouseDown={createPlayKill} onMouseUp={release}>Play</button>

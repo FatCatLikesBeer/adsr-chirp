@@ -1,4 +1,4 @@
-export default function OSCOneModule({
+export default function VoiceOneOSC({
   instrumentParams,
   setInstrumentParams,
 }: {

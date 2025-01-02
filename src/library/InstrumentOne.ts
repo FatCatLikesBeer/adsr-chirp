@@ -21,12 +21,11 @@ export default class InstrumentOne {
     this.ampDestination.connect(this.audioCtx.destination);
     this.voice1BiQuadFilter.connect(this.ampDestination);
     this.voice1Amp.connect(this.voice1BiQuadFilter);
-    // this.voice1Amp.connect(this.ampDestination);
     this.voice1Osc.connect(this.voice1Amp);
     this.voice1LFO.connect(this.voice1LFOAmp);
     this.voice1LFOAmp.connect(this.voice1Osc.frequency);
 
-    this.ampDestination.gain.value = 0.03;
+    this.ampDestination.gain.value = 0.010;
 
     this.voice1BiQuadFilter.type = this.instrumentParams.osc1Filter.type;
     this.voice1BiQuadFilter.frequency.value = this.instrumentParams.osc1Filter.frequency;

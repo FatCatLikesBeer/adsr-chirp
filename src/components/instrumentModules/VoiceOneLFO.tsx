@@ -1,4 +1,4 @@
-export default function OSCOneLFO({
+export default function VoiceOneLFO({
   instrumentParams,
   setInstrumentParams,
 }: {
