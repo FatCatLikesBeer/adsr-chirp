@@ -13,6 +13,17 @@
   padding: 0.8rem 1rem 1rem;
 }
 
+.module_LFO {
+  flex-direction: row;
+  width: 40rem;
+  justify-content: space-between;
+  padding: 0.1rem 1rem 0.1rem;
+}
+
+.module_LFO > * {
+  align-content: center;
+}
+
 .module_title {
   padding: 0 0 0.3rem;
   margin: 0;

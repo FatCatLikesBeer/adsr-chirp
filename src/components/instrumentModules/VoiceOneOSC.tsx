@@ -37,7 +37,7 @@ export default function VoiceOneOSC({
         <span className="module_info"></span>
       </div>
       <div style={{ marginTop: "0rem", display: "flex", flexDirection: "column", justifyContent: "space-evenly", height: "100%" }}>
-        <div style={{ display: "flex", flexDirection: "row" }}>
+        <div style={{ display: "flex", flexDirection: "column" }}>
           <h3 className="slider_label">Wave Shape</h3>
           <select name="wave-shape" onChange={handleWaveTypeChange}>
             {waveTables.map((type) => {
