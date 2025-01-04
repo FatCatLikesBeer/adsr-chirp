@@ -5,16 +5,17 @@
 export default class InstrumentOne {
   audioCtx: AudioContext;
   ampDestination: GainNode;
-  mixer: ChannelMergerNode;
 
+  voice1FinalAmp: GainNode;
   voice1BiQuadFilter: BiquadFilterNode;
   voice1AmpForEnvelope: GainNode;
-  voice1AmpForLFO: GainNode;
+  voice1LFOIntensityInput: GainNode;
   voice1Osc: OscillatorNode;
 
+  voice2FinalAmp: GainNode;
   voice2BiQuadFilter: BiquadFilterNode;
   voice2AmpForEnvelope: GainNode;
-  voice2AmpForLFO: GainNode;
+  voice2LFOIntensityInput: GainNode;
   voice2Osc: OscillatorNode;
 
   LFO1: OscillatorNode;
@@ -30,16 +31,17 @@ export default class InstrumentOne {
     // AudioCtx Node Init
     this.audioCtx = new AudioContext;
     this.ampDestination = this.audioCtx.createGain();
-    this.mixer = this.audioCtx.createChannelMerger(2);
 
+    this.voice1FinalAmp = this.audioCtx.createGain();
     this.voice1BiQuadFilter = this.audioCtx.createBiquadFilter();
     this.voice1AmpForEnvelope = this.audioCtx.createGain();
-    this.voice1AmpForLFO = this.audioCtx.createGain();
+    this.voice1LFOIntensityInput = this.audioCtx.createGain();
     this.voice1Osc = this.audioCtx.createOscillator();
 
+    this.voice2FinalAmp = this.audioCtx.createGain();
     this.voice2BiQuadFilter = this.audioCtx.createBiquadFilter();
     this.voice2AmpForEnvelope = this.audioCtx.createGain();
-    this.voice2AmpForLFO = this.audioCtx.createGain();
+    this.voice2LFOIntensityInput = this.audioCtx.createGain();
     this.voice2Osc = this.audioCtx.createOscillator();
 
     this.LFO1 = this.audioCtx.createOscillator();
@@ -53,17 +55,18 @@ export default class InstrumentOne {
 
     // Static Routing
     this.ampDestination.connect(this.audioCtx.destination);
-    this.mixer.connect(this.ampDestination);
 
-    this.voice1BiQuadFilter.connect(this.ampDestination);
+    this.voice1FinalAmp.connect(this.ampDestination)
+    this.voice1BiQuadFilter.connect(this.voice1FinalAmp);
     this.voice1AmpForEnvelope.connect(this.voice1BiQuadFilter);
-    this.voice1AmpForLFO.connect(this.voice1AmpForEnvelope);
-    this.voice1Osc.connect(this.voice1AmpForLFO);
+    this.voice1LFOIntensityInput.connect(this.voice1AmpForEnvelope);
+    this.voice1Osc.connect(this.voice1LFOIntensityInput);
 
-    this.voice2BiQuadFilter.connect(this.ampDestination);
+    this.voice2FinalAmp.connect(this.ampDestination)
+    this.voice2BiQuadFilter.connect(this.voice2FinalAmp);
     this.voice2AmpForEnvelope.connect(this.voice2BiQuadFilter);
-    this.voice2AmpForLFO.connect(this.voice2AmpForEnvelope);
-    this.voice2Osc.connect(this.voice2AmpForLFO);
+    this.voice2LFOIntensityInput.connect(this.voice2AmpForEnvelope);
+    this.voice2Osc.connect(this.voice2LFOIntensityInput);
 
     this.LFO1.connect(this.LFO1Intensity);
     this.LFO2.connect(this.LFO2Intensity);
@@ -77,10 +80,12 @@ export default class InstrumentOne {
     // Instrument Parameter to AudioCtx Node Mapping
     this.ampDestination.gain.value = 0.010;
 
+    this.voice1FinalAmp.gain.value = (this.instrumentParams.osc1Params.volume * 0.2);
     this.voice1BiQuadFilter.type = this.instrumentParams.osc1Filter.type;
     this.voice1BiQuadFilter.frequency.value = this.instrumentParams.osc1Filter.frequency;
     this.voice1BiQuadFilter.Q.value = this.instrumentParams.osc1Filter.q;
 
+    this.voice2FinalAmp.gain.value = (this.instrumentParams.osc2Params.volume * 0.2);
     this.voice2BiQuadFilter.type = this.instrumentParams.osc2Filter.type;
     this.voice2BiQuadFilter.frequency.value = this.instrumentParams.osc2Filter.frequency;
     this.voice2BiQuadFilter.Q.value = this.instrumentParams.osc2Filter.q;
@@ -128,7 +133,7 @@ export default class InstrumentOne {
     );
     this.voice2AmpForEnvelope.gain.setTargetAtTime(10, 0, this.instrumentParams.osc2AmpEnvelope[0] * 0.25);
     this.voice2AmpForEnvelope.gain.setTargetAtTime(
-      this.instrumentParams.osc1AmpEnvelope[2],
+      this.instrumentParams.osc2AmpEnvelope[2],
       this.audioCtx.currentTime + this.instrumentParams.osc2AmpEnvelope[0],
       ((this.instrumentParams.osc2AmpEnvelope[1] + 0.001) * .25)
     );
@@ -162,13 +167,25 @@ export default class InstrumentOne {
         LFO.connect(this.voice1Osc.frequency);
         break;
       case "OSC 1 Amplitude":
-        LFO.connect(this.voice1AmpForLFO.gain);
+        LFO.connect(this.voice1LFOIntensityInput.gain);
         break;
       case "OSC 2 Frequency":
         LFO.connect(this.voice2Osc.frequency);
         break;
       case "OSC 2 Amplitude":
-        LFO.connect(this.voice2AmpForLFO.gain);
+        LFO.connect(this.voice2LFOIntensityInput.gain);
+        break;
+      case "Filter 1 Cutoff":
+        LFO.connect(this.voice1BiQuadFilter.frequency);
+        break;
+      case "Filter 1 Q":
+        LFO.connect(this.voice1BiQuadFilter.Q);
+        break;
+      case "Filter 2 Cutoff":
+        LFO.connect(this.voice2BiQuadFilter.frequency);
+        break;
+      case "Filter 2 Q":
+        LFO.connect(this.voice2BiQuadFilter.Q);
         break;
       case "none":
         break;

@@ -32,10 +32,10 @@ export default function VoiceOneLFO({
   }
 
   function resetLFOAmplitude() {
-    if (LFOValues.target.includes("Amplitude")) {
-      LFOValues.amplitude = 5;
-    } else {
+    if (LFOValues.target.includes("Frequency")) {
       LFOValues.amplitude = 50;
+    } else {
+      LFOValues.amplitude = 5;
     }
     setInstrumentParams({ ...LFOValues });
   }
@@ -139,14 +139,14 @@ function setIntensity(LFOValues: InstrumentOneParams["LFOOne"], setIntensityCeil
       ceiling = 10;
       break;
     case "Filter 1 Cutoff":
-      LFOValues.amplitude = 5;
-      ceiling = 10;
-      break;
-    case "Filter 1 Q":
-      LFOValues.amplitude = 5;
-      ceiling = 10;
+      LFOValues.amplitude = 250;
+      ceiling = 500;
       break;
     case "Filter 2 Cutoff":
+      LFOValues.amplitude = 250;
+      ceiling = 500;
+      break;
+    case "Filter 1 Q":
       LFOValues.amplitude = 5;
       ceiling = 10;
       break;

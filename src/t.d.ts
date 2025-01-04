@@ -35,6 +35,7 @@ interface InstrumentOneParams {
 type oscParams = {
   type: OscillatorType;
   frequency: number;
+  volume: number;
 }
 
 /** Filter Parameters */
@@ -60,3 +61,4 @@ type ModulationTarget =
   "OSC 1 Amplitude" | "OSC 2 Amplitude" |
   "Filter 1 Cutoff" | "Filter 2 Cutoff" |
   "Filter 1 Q" | "Filter 2 Q" | "none";
+

@@ -13,10 +13,12 @@ export default function InstrumentOneUi() {
     osc1Params: {
       type: "sine",
       frequency: 440,
+      volume: 5,
     },
     osc2Params: {
       type: "square",
       frequency: 554.36,
+      volume: 5,
     },
     osc1AmpEnvelope: [1, 0, 10, 1],
     osc2AmpEnvelope: [1, 0, 10, 1],

@@ -11,7 +11,7 @@ function App() {
 
 export default App
 
-// TODO: Add Voice2 to UI
+// TODO: Filter Envelope
 // TODO: Create a Key sync function
 // TODO: Create Filters / Effects
 // TODO: Change favicon
