@@ -1,3 +1,7 @@
+/**
+ * WebAudio Instrument: InstrumentOne
+ * @params InstrumentOneParams
+ */
 export default class InstrumentOne {
   audioCtx: AudioContext;
   ampDestination: GainNode;

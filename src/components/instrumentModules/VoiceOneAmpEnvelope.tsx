@@ -1,31 +1,31 @@
 export default function VoiceOneAmpEnvelope({
   instrumentParams,
   setInstrumentParams,
+  title,
 }: {
-  instrumentParams: InstrumentOneParams,
-  setInstrumentParams: React.Dispatch<InstrumentOneParams>,
+  instrumentParams: number[];
+  setInstrumentParams: (_value: any) => void;
+  title: string;
 }) {
   const labels = ["A", "D", "S", "R"];
 
   return (
     <div className="module_amp">
       <div className="module_header">
-        <h3 className="module_title">OSC 1 AMP ENVELOPE</h3>
+        <h3 className="module_title">{title}</h3>
         <span className="module_info"></span>
       </div>
       <div className="vertical_slider_board">
-        {instrumentParams.osc1AmpEnvelope.map((elem, i) => {
+        {instrumentParams.map((elem, i) => {
 
           function handleValueChange(event: React.ChangeEvent<HTMLInputElement>) {
-            let newInstrumentOneParams = { ...instrumentParams };
-            newInstrumentOneParams.osc1AmpEnvelope[i] = Number(event.target.value);
-            setInstrumentParams({ ...newInstrumentOneParams });
+            instrumentParams[i] = Number(event.target.value);
+            setInstrumentParams({ ...instrumentParams });
           }
 
           function defaultParam() {
-            let newInstrumentOneParams = { ...instrumentParams };
-            newInstrumentOneParams.osc1AmpEnvelope[i] = 1;
-            setInstrumentParams({ ...newInstrumentOneParams });
+            instrumentParams[i] = 1;
+            setInstrumentParams({ ...instrumentParams });
           }
 
           return (

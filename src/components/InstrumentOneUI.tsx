@@ -5,23 +5,26 @@ import VoiceOneLFO from "./instrumentModules/VoiceOneLFO";
 import VoiceOneAmpEnvelope from "./instrumentModules/VoiceOneAmpEnvelope";
 import VoiceOneFilter from "./instrumentModules/VoiceOneFilter";
 
+/**
+ * User Interface for InstrumentOne
+ */
 export default function InstrumentOneUi() {
   const [instrumentParams, setInstrumentParams] = useState<InstrumentOneParams>({
     osc1Params: {
       type: "sine",
       frequency: 440,
     },
+    osc2Params: {
+      type: "square",
+      frequency: 554.36,
+    },
     osc1AmpEnvelope: [1, 0, 10, 1],
+    osc2AmpEnvelope: [1, 0, 10, 1],
     osc1Filter: {
       type: "allpass",
       frequency: 400,
       q: 1,
     },
-    osc2Params: {
-      type: "square",
-      frequency: 554.36,
-    },
-    osc2AmpEnvelope: [1, 0, 10, 1],
     osc2Filter: {
       type: "allpass",
       frequency: 400,
@@ -34,10 +37,10 @@ export default function InstrumentOneUi() {
       target: "OSC 1 Frequency",
     },
     LFOTwo: {
-      type: "sine",
+      type: "square",
       frequency: 11,
-      amplitude: 50,
-      target: "OSC 2 Amplitude"
+      amplitude: 150,
+      target: "OSC 2 Frequency"
     },
     LFOThree: {
       type: "sine",
@@ -69,9 +72,12 @@ export default function InstrumentOneUi() {
   return (
     <div>
       <div className="instrument_voice">
-        <VoiceOneOSC instrumentParams={instrumentParams} setInstrumentParams={setInstrumentParams} />
-        <VoiceOneAmpEnvelope instrumentParams={instrumentParams} setInstrumentParams={setInstrumentParams} />
-        <VoiceOneFilter instrumentParams={instrumentParams} setInstrumentParams={setInstrumentParams} />
+        <VoiceOneOSC instrumentParams={instrumentParams.osc1Params} setInstrumentParams={setParams} title="OSC 1" />
+        <VoiceOneAmpEnvelope instrumentParams={instrumentParams.osc1AmpEnvelope} setInstrumentParams={setParams} title="OSC 1 AMP ADSR" />
+        <VoiceOneFilter instrumentParams={instrumentParams.osc1Filter} setInstrumentParams={setParams} title="OSC 1 FILTER" />
+        <VoiceOneOSC instrumentParams={instrumentParams.osc2Params} setInstrumentParams={setParams} title="OSC 2" />
+        <VoiceOneAmpEnvelope instrumentParams={instrumentParams.osc2AmpEnvelope} setInstrumentParams={setParams} title="OSC 2 AMP ADSR" />
+        <VoiceOneFilter instrumentParams={instrumentParams.osc2Filter} setInstrumentParams={setParams} title="OSC 2 FILTER" />
       </div>
       <div className="instrument_voice" style={{ flexDirection: "column" }}>
         <VoiceOneLFO

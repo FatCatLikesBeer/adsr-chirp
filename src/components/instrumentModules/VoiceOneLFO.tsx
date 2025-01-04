@@ -6,8 +6,8 @@ export default function VoiceOneLFO({
   module_title,
   siblingTargets,
 }: {
-  LFOValues: InstrumentOneParams["LFOOne"];
-  setInstrumentParams: (value: any) => void;
+  LFOValues: lfoParams;
+  setInstrumentParams: (_value: any) => void;
   module_title: string;
   siblingTargets: [ModulationTarget, ModulationTarget];
 }) {
@@ -73,7 +73,7 @@ export default function VoiceOneLFO({
       </div>
       <div>
         <h3 className="slider_label">Shape</h3>
-        <select name="lfo-shape" onChange={handleLFOTypeChange}>
+        <select name="lfo-shape" onChange={handleLFOTypeChange} defaultValue={LFOValues.type}>
           {waveTables.map((type) => {
             return (
               <option value={type.toLowerCase()} key={`${type.toLowerCase()}wave-shape`}>{type}</option>
@@ -85,8 +85,7 @@ export default function VoiceOneLFO({
         <h3 className="slider_label">Target</h3>
         <select name="lfo-shape" onChange={handleLFOTargetChange} defaultValue={LFOValues.target}>
           {modTargets.map((target) => {
-            let disabled = siblingTargets.includes(target);
-            // let selected = LFOValues.target === target;
+            let disabled = target === "none" ? false : siblingTargets.includes(target);
             return (
               <option value={target} key={`${target.toLowerCase()}wave-shape`} disabled={disabled}>{target}</option>
             );
