@@ -1,10 +1,10 @@
 import './App.css';
-import InstrumentOneUi from './components/InstrumentOneUI';
+import InstrumentTwoUi from './components/InstrumentTwoUI';
 
 function App() {
   return (
     <>
-      <InstrumentOneUi />
+      <InstrumentTwoUi />
     </>
   )
 }

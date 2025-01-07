@@ -2,10 +2,12 @@ export default function VoiceOneAmpEnvelope({
   instrumentParams,
   setInstrumentParams,
   title,
+  disabled = false,
 }: {
   instrumentParams: number[];
   setInstrumentParams: (_value: any) => void;
   title: string;
+  disabled: boolean;
 }) {
   const labels = ["A", "D", "S", "R"];
 
@@ -37,9 +39,10 @@ export default function VoiceOneAmpEnvelope({
                 type="range"
                 value={elem}
                 min="0"
-                max="10"
+                max="5"
                 step="0.01"
                 onChange={handleValueChange}
+                disabled={disabled}
               />
               <h3
                 className="slider_label"

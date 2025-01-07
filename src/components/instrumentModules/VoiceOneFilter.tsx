@@ -8,7 +8,7 @@ export default function VoiceOneFilter({
   title: string;
 }) {
   const filterType: string[] = [
-    "AllPass", "LowPass", "HighPass", "BandPass", "LowShelf", "HighShelf", "Peaking", "Notch",
+    "AllPass", "LowPass", "HighPass", "BandPass", "Notch",
   ];
 
   function handleFilterTypeChange(event: React.ChangeEvent<HTMLSelectElement>) {
@@ -59,7 +59,7 @@ export default function VoiceOneFilter({
             type="range"
             value={instrumentParams.frequency}
             min="100"
-            max="8000"
+            max="6000"
             onChange={handleFilterFrequencyChange}
           />
           <p className="slider_value">{instrumentParams.frequency}</p>

@@ -26,7 +26,10 @@ export default function VoiceOneOSC({
   function handleOSCFrequencyChange(event: React.ChangeEvent<HTMLInputElement>) {
     if (Number(event.target.value)) {
       instrumentParams.frequency = Number(event.target.value);
-      if ((instrumentParams.frequency < 100) || (instrumentParams.frequency > 8000)) {
+      if ((instrumentParams.frequency > 6000)) {
+        instrumentParams.frequency = 400;
+      }
+      if (instrumentParams.frequency < 0) {
         instrumentParams.frequency = 400;
       }
       setInstrumentParams({ ...instrumentParams });
@@ -89,7 +92,7 @@ export default function VoiceOneOSC({
             type="range"
             value={instrumentParams.frequency}
             min="100"
-            max="8000"
+            max="6000"
             step="0.01"
             onChange={handleOSCFrequencyChange}
           />

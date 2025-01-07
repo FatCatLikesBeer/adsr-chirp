@@ -45,10 +45,10 @@ export default class InstrumentOne {
     this.voice2Osc = this.audioCtx.createOscillator();
 
     this.LFO1 = this.audioCtx.createOscillator();
-    this.LFO1Intensity = this.audioCtx.createGain();
     this.LFO2 = this.audioCtx.createOscillator();
-    this.LFO2Intensity = this.audioCtx.createGain();
     this.LFO3 = this.audioCtx.createOscillator();
+    this.LFO1Intensity = this.audioCtx.createGain();
+    this.LFO2Intensity = this.audioCtx.createGain();
     this.LFO3Intensity = this.audioCtx.createGain();
 
     this.instrumentParams = instrumentParams;
@@ -116,6 +116,12 @@ export default class InstrumentOne {
     this.voice2Osc.start();
 
     this.attackToSustain();
+
+    setTimeout(() => {
+      this.audioCtx.close()
+        .then(() => { console.log("AudioCtx automatically closed") })
+        .catch((err) => { console.error("AudioCtx was already closed", err) });
+    }, 12000);
   }
 
   /**
@@ -127,16 +133,43 @@ export default class InstrumentOne {
     // this.voice1AmpForEnvelope.gain.setValueCurveAtTime([0, 10], 0, (this.instrumentParams.osc1AmpEnvelope[0] + 0.001) * 0.25);
     this.voice1AmpForEnvelope.gain.setTargetAtTime(10, 0, this.instrumentParams.osc1AmpEnvelope[0] * 0.25);
     this.voice1AmpForEnvelope.gain.setTargetAtTime(
-      this.instrumentParams.osc1AmpEnvelope[2],
+      this.instrumentParams.osc1AmpEnvelope[2] * 2,
       this.audioCtx.currentTime + this.instrumentParams.osc1AmpEnvelope[0],
       ((this.instrumentParams.osc1AmpEnvelope[1] + 0.001) * .25)
     );
+
     this.voice2AmpForEnvelope.gain.setTargetAtTime(10, 0, this.instrumentParams.osc2AmpEnvelope[0] * 0.25);
     this.voice2AmpForEnvelope.gain.setTargetAtTime(
-      this.instrumentParams.osc2AmpEnvelope[2],
+      this.instrumentParams.osc2AmpEnvelope[2] * 2,
       this.audioCtx.currentTime + this.instrumentParams.osc2AmpEnvelope[0],
       ((this.instrumentParams.osc2AmpEnvelope[1] + 0.001) * .25)
     );
+
+    if (![
+      this.instrumentParams.LFOOne.target,
+      this.instrumentParams.LFOTwo.target,
+      this.instrumentParams.LFOThree.target,
+    ].includes("Filter 1 Cutoff")) {
+      this.voice1BiQuadFilter.frequency.setTargetAtTime(10, 0, this.instrumentParams.osc1FilterEnvelope[0] * 0.25);
+      this.voice1BiQuadFilter.frequency.setTargetAtTime(
+        this.instrumentParams.osc1FilterEnvelope[2],
+        this.audioCtx.currentTime + this.instrumentParams.osc1FilterEnvelope[0],
+        ((this.instrumentParams.osc1FilterEnvelope[1] + 0.001) * .25)
+      );
+    }
+
+    if (![
+      this.instrumentParams.LFOOne.target,
+      this.instrumentParams.LFOTwo.target,
+      this.instrumentParams.LFOThree.target,
+    ].includes("Filter 2 Cutoff")) {
+      this.voice2BiQuadFilter.frequency.setTargetAtTime(10, 0, this.instrumentParams.osc2FilterEnvelope[0] * 0.25);
+      this.voice2BiQuadFilter.frequency.setTargetAtTime(
+        this.instrumentParams.osc2FilterEnvelope[2],
+        this.audioCtx.currentTime + this.instrumentParams.osc2FilterEnvelope[0],
+        ((this.instrumentParams.osc2FilterEnvelope[1] + 0.001) * .25)
+      );
+    }
   }
 
   /**
@@ -147,6 +180,22 @@ export default class InstrumentOne {
     this.voice1AmpForEnvelope.gain.exponentialRampToValueAtTime(0.01, this.audioCtx.currentTime + this.instrumentParams.osc1AmpEnvelope[3]);
     this.voice2AmpForEnvelope.gain.cancelScheduledValues(this.audioCtx.currentTime);
     this.voice2AmpForEnvelope.gain.exponentialRampToValueAtTime(0.01, this.audioCtx.currentTime + this.instrumentParams.osc2AmpEnvelope[3]);
+    if (![
+      this.instrumentParams.LFOOne.target,
+      this.instrumentParams.LFOTwo.target,
+      this.instrumentParams.LFOThree.target,
+    ].includes("Filter 1 Cutoff")) {
+      this.voice1BiQuadFilter.frequency.cancelScheduledValues(this.audioCtx.currentTime);
+      this.voice1BiQuadFilter.frequency.exponentialRampToValueAtTime(0.01, this.audioCtx.currentTime + this.instrumentParams.osc1FilterEnvelope[3]);
+    }
+    if (![
+      this.instrumentParams.LFOOne.target,
+      this.instrumentParams.LFOTwo.target,
+      this.instrumentParams.LFOThree.target,
+    ].includes("Filter 2 Cutoff")) {
+      this.voice2BiQuadFilter.frequency.cancelScheduledValues(this.audioCtx.currentTime);
+      this.voice2BiQuadFilter.frequency.exponentialRampToValueAtTime(0.01, this.audioCtx.currentTime + this.instrumentParams.osc2FilterEnvelope[3]);
+    }
   }
 
   /**

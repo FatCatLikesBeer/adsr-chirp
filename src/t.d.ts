@@ -23,6 +23,10 @@ interface InstrumentOneParams {
   osc1Filter: oscFilter;
   /** Filter Parameters from OSC 2 Filter */
   osc2Filter: oscFilter;
+  /** ADSR/Envelope for OSC 1 Filter */
+  osc1FilterEnvelope: number[];
+  /** ADSR/Envelope for OSC 2 Filter */
+  osc2FilterEnvelope: number[];
   /** Type, Frequency, and Amplitude for OSC LFO 1 */
   LFOOne: lfoParams;
   /** Type, Frequency, and Amplitude for OSC LFO 2 */
