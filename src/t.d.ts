@@ -1,3 +1,24 @@
+import { NonCustomOscillatorType } from "tone/build/esm/source/oscillator/OscillatorInterface";
+
+/**
+ * Instrument Two Parameters
+ * @property osc1Params - oscParams
+ * @property osc2Params - oscParams
+ * @property osc1AmpEnvelope - number[]
+ * @property osc2AmpEnvelope - number[]
+ * @property osc1Filter - oscFilter
+ * @property osc2Filter - oscFilter
+ * @property LFOOne - lfoParams
+ * @property LFOTwo - lfoParams
+ * @property LFOThree - lfoParams
+ */
+interface InstrumentTwoParams extends InstrumentOneParams {
+  /** Type and Frequency for OSC 1 */
+  osc1Params: oscParams2;
+  /** Type and Frequency for OSC 2 */
+  osc2Params: oscParams2;
+}
+
 /**
  * Instrument One Parameters
  * @property osc1Params - oscParams
@@ -36,10 +57,14 @@ interface InstrumentOneParams {
 }
 
 /** Oscillator Parameters */
-type oscParams = {
+interface oscParams {
   type: OscillatorType;
   frequency: number;
   volume: number;
+}
+
+interface oscParams2 extends oscParams {
+  type: NonCustomOscillatorType;
 }
 
 /** Filter Parameters */
