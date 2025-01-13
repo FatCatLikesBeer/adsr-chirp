@@ -20,16 +20,28 @@ export default class InstrumentTwo {
     this.synth = new Tone.Synth({
       oscillator: {
         type: this.waveType,
+      },
+      envelope: {
+        attack: 0.3,
+        attackCurve: "linear",
+        decay: 0.3,
+        decayCurve: "exponential",
+        release: 0.3,
+        releaseCurve: "exponential",
       }
     }).toDestination();
-    this.now = Tone.now();
   }
 
   attack() {
-    this.synth.triggerAttack(this.frequency, 0, this.synthVelocity);
+    this.now = Tone.now();
+    this.synth.triggerAttack(this.frequency, this.now, this.synthVelocity);
   }
 
   release() {
-    this.synth.triggerRelease(0);
+    this.synth.triggerRelease();
+  }
+
+  script() {
+    this.synth.triggerAttackRelease(this.frequency, 0.6, 0, this.synthVelocity);
   }
 }

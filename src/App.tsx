@@ -11,7 +11,6 @@ function App() {
 
 export default App
 
-// TODO: Filter Envelope
-// TODO: Create a Key sync function
-// TODO: Create Filters / Effects
+// TODO: Knob 😩
+// TODO: Oscilliscope
 // TODO: Change favicon

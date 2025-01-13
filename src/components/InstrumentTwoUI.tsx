@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import InstrumentTwo from '../library/InstrumentTwo';
 import VoiceOneOSC from "./instrumentTwoModules/VoiceOneOSC";
 import { InstrumentTwoParams } from "../t";
+import Knob from "./instrumentTwoModules/Knob"; Knob
 
 /**
  * User Interface for InstrumentOne
@@ -51,31 +52,30 @@ export default function InstrumentTwoUi() {
       target: "none",
     },
   });
-  const [instrument, setInstrument] = useState<InstrumentTwo>(new InstrumentTwo(instrumentParams));
+  const [instrument] = useState<InstrumentTwo>(new InstrumentTwo(instrumentParams));
 
   function createPlayKill() {
     instrument!.attack();
   }
 
   function release() {
-    instrument!.release();
-    setInstrument(new InstrumentTwo(instrumentParams));
+    instrument!.synth.triggerRelease();
   }
 
   function setInstrumentValues(values: any): undefined {
     let newInstrumentParams = { ...instrumentParams, values }
     setInstrumentParams({ ...newInstrumentParams });
-    setInstrument(new InstrumentTwo(newInstrumentParams));
   }
 
   useEffect(() => {
-    const myComment = "<!-- InstrumentTwo -->";
+    const myComment = "<!-- InstrumentTwo -->\n<!-- Thank you for the dial saltofthemar https://marlotron.saltofthemar.ca/ -->";
     document.body.insertAdjacentHTML("beforeend", myComment);
   }, []);
 
   return (
     <div>
-      <VoiceOneOSC title="OSC 1" instrumentParams={instrumentParams.osc1Params} setInstrumentParams={setInstrumentValues} />
+      <VoiceOneOSC title="OSC 1" instrumentParams={instrumentParams.osc1Params} setInstrumentParams={setInstrumentValues} instrument={instrument} />
+      <Knob title="A" inputMin={0} inputMax={10} />
       <button type="button" onMouseDown={createPlayKill} onMouseUp={release}>Play</button>
     </div>
   );

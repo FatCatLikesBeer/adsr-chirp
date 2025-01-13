@@ -1,12 +1,15 @@
 import { useState, useEffect, useRef } from "react";
 import { NonCustomOscillatorType } from "tone/build/esm/source/oscillator/OscillatorInterface";
 import { oscParams2 } from "../../t";
+import InstrumentTwo from "../../library/InstrumentTwo";
 
 export default function VoiceOneOSC({
+  instrument,
   instrumentParams,
   setInstrumentParams,
   title,
 }: {
+  instrument: InstrumentTwo;
   instrumentParams: oscParams2;
   setInstrumentParams: (_value: any) => void;
   title: string;
@@ -15,14 +18,34 @@ export default function VoiceOneOSC({
   const frequencyElementRef = useRef<HTMLInputElement>(null);
   const waveTables: string[] = [
     "Sine",
+    "Sine2",
+    "Sine3",
+    "Sine4",
+    "Sine5",
+    "Sine6",
+    "Sine7",
     "Sawtooth",
-    "Triangle",
+    "Sawtooth2",
+    "Sawtooth3",
+    "Sawtooth4",
+    "Sawtooth5",
+    "Sawtooth6",
+    "Sawtooth7",
     "Square",
+    "Square2",
+    "Square3",
+    "Square4",
+    "Square5",
+    "Square6",
+    "Square7",
+    "Triangle",
   ];
 
   function handleWaveTypeChange(event: React.ChangeEvent<HTMLSelectElement>) {
-    instrumentParams.type = event.target.value as NonCustomOscillatorType;
+    const eventValue = event.target.value as NonCustomOscillatorType;
+    instrumentParams.type = eventValue;
     setInstrumentParams({ ...instrumentParams });
+    instrument!.synth.oscillator.type = eventValue;
   }
 
   function handleOSCFrequencyChange(event: React.ChangeEvent<HTMLInputElement>) {
