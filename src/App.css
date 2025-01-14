@@ -5,6 +5,10 @@
   text-align: center;
 }
 
+.instrument {
+  user-select: none;
+}
+
 .module_amp {
   display: flex;
   flex-direction: column;
@@ -65,7 +69,6 @@
 }
 
 /* Thnaks for the dial saltofthemar! */
-
 .dial-input {
   display: none;
 }
@@ -88,6 +91,7 @@
   padding: 0.5rem;
   border-radius: 50%;
   position: absolute;
+  /* I really need to learn what this does... */
   --c: #fff;
   --w: 0.18rem;
   --grad: transparent calc(50% - var(--w)/2),
@@ -110,5 +114,5 @@
   width: 0.2rem;
   height: 20%;
   background: rebeccapurple;
-  /*transform: translateX(-50%);*/
+  transform: translateX(-50%);
 }

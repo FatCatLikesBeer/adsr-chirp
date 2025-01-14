@@ -9,12 +9,11 @@ export default function Knob({
   inputMin: number;
   inputMax: number;
 }) {
-  const [yValue, setYValue] = useState<number>(0);
-  const [minRotation, maxRotation, sensitivity] = [-135, 135, 1.5];
+  const [minRotation, maxRotation, sensitivity] = [-150, 150, 1.2];
+  const [yValue, setYValue] = useState<number>(minRotation);
   const visualRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const indicatorRef = useRef<HTMLDivElement>(null);
-
 
   function onStart() {
     document.addEventListener("mousemove", onMove);
@@ -24,14 +23,15 @@ export default function Knob({
 
   function onMove(e: MouseEvent) {
     setYValue((previous) => {
-      const newValue = previous - e.movementY;
+      if (previous > maxRotation) { previous = maxRotation }
+      if (previous < minRotation) { previous = minRotation }
+      let newValue: number = previous - (e.movementY * sensitivity);
       if ((newValue > maxRotation) || (newValue < minRotation)) {
         return previous;
       } else {
         return newValue;
       }
     });
-    console.log(yValue);
   }
 
   function onEnd() {
@@ -41,15 +41,18 @@ export default function Knob({
   }
 
   useEffect(() => {
+    visualRef.current!.style.transform = `rotate(${yValue}deg)`;
+  }, [yValue]);
+
+  useEffect(() => {
     visualRef.current?.addEventListener('mousedown', onStart);
-    inputRef.current!.style.pointerEvents = "none";
-    visualRef.current!.style.pointerEvents = "auto";
+    visualRef.current!.addEventListener('dblclick', () => setYValue(minRotation));
     visualRef.current!.style.transform = `rotate(${minRotation}deg)`;
   }, []);
 
   return (
     <div className="dial-container">
-      <div className="dial-title">{yValue}</div>
+      <div className="dial-title">{title}</div>
       <input
         className="dial-input"
         type="range"
@@ -61,7 +64,7 @@ export default function Knob({
       <div className="dial-visual" ref={visualRef}>
         <div className="dial-indicator" ref={indicatorRef} />
       </div>
-      <div className="dial-label"></div>
+      <div className="dial-label">{yValue}</div>
     </div>
   );
 }

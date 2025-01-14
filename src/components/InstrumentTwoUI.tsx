@@ -73,7 +73,7 @@ export default function InstrumentTwoUi() {
   }, []);
 
   return (
-    <div>
+    <div className="instrument">
       <VoiceOneOSC title="OSC 1" instrumentParams={instrumentParams.osc1Params} setInstrumentParams={setInstrumentValues} instrument={instrument} />
       <Knob title="A" inputMin={0} inputMax={10} />
       <button type="button" onMouseDown={createPlayKill} onMouseUp={release}>Play</button>
