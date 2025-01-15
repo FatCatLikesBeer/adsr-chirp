@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import InstrumentTwo from '../library/InstrumentTwo';
 import VoiceOneOSC from "./instrumentTwoModules/VoiceOneOSC";
+import VoiceOneAmpEnvelope from "./instrumentTwoModules/VoiceOneAmpEnvelope.tsx";
 import { InstrumentTwoParams } from "../t";
 import Knob from "./instrumentTwoModules/Knob"; Knob
 
@@ -67,6 +68,12 @@ export default function InstrumentTwoUi() {
     setInstrumentParams({ ...newInstrumentParams });
   }
 
+  function setAmpOneEnvelope(newValues: number[]) {
+    let newParams = { ...instrumentParams };
+    newParams.osc1AmpEnvelope = newValues;
+    setInstrumentParams(newParams);
+  };
+
   useEffect(() => {
     const myComment = "<!-- InstrumentTwo -->\n<!-- Thank you for the dial saltofthemar https://marlotron.saltofthemar.ca/ -->";
     document.body.insertAdjacentHTML("beforeend", myComment);
@@ -75,7 +82,12 @@ export default function InstrumentTwoUi() {
   return (
     <div className="instrument">
       <VoiceOneOSC title="OSC 1" instrumentParams={instrumentParams.osc1Params} setInstrumentParams={setInstrumentValues} instrument={instrument} />
-      <Knob title="A" inputMin={0} inputMax={10} />
+      <VoiceOneAmpEnvelope
+        title="OSC 1 AMP ADSR"
+        instrumentParams={instrumentParams.osc1AmpEnvelope}
+        setInstrumentParams={setAmpOneEnvelope}
+        disabled={false}
+      />
       <button type="button" onMouseDown={createPlayKill} onMouseUp={release}>Play</button>
     </div>
   );

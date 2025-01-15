@@ -69,19 +69,19 @@
 }
 
 /* Thnaks for the dial saltofthemar! */
-.dial-input {
-  display: none;
+.dial-container {
+  width: 3.5rem;
 }
 
-.dial-visual {
-  z-index: 0;
-  width: 2.5rem;
-  height: 2.5rem;
-  margin: 0.5rem;
-  border-radius: 50%;
-  background: pink;
-  pointer-events: auto;
-  cursor: grab;
+.dial-knob {
+  align-content: center;
+}
+
+.knob_group {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  flex-wrap: wrap;
 }
 
 .dial-division {
@@ -107,12 +107,33 @@
     linear-gradient(-30deg  ,var(--grad));
 }
 
+.dial-visual {
+  z-index: 0;
+  width: 2.4rem;
+  height: 2.4rem;
+  margin: 0.5rem;
+  background: #242424;
+  border-radius: 50%;
+  border: white 0.1rem solid;
+  pointer-events: auto;
+  cursor: grab;
+}
+
 .dial-indicator {
   position: relative;
   top: 10%;
   left: 50%;
   width: 0.2rem;
   height: 20%;
-  background: rebeccapurple;
+  background: white;
+  transition: transform 2s linear;
   transform: translateX(-50%);
+}
+
+.disabled-color {
+  color: grey;
+}
+
+.disabled-background {
+  color: grey;
 }
