@@ -2,25 +2,37 @@ import { useRef, useEffect, useState } from 'react';
 
 /**
  * Knob/Dial element for ADSR/Envelope
- * @param label: string
- * @param disabled: boolean
+ * @prop {string} label - its the label above the knob
+ * @prop {function} returnValueCallback - Callback to get value of knob
+ * @prop {number} [defaultValue = 1] - defaulted to 1. Default value of the knob
+ * @prop {number} [min = 0] - minimum of range, defaulted to 0
+ * @prop {number} [max = 10] - maximum of range, defaulted to 10
+ * @prop {number} [step = 1.5] - value incrementes between min and max ranges
+ * @prop {boolean} [disabled = false] - disable the compoment. Defaulted to false
  */
 export default function Knob({
   label,
-  value,
-  setValue,
+  returnValueCallback,
+  defaultValue = 1,
+  min = 0,
+  max = 10,
+  step = 1.5,
   disabled = false,
 }: {
   label: string;
-  value: number;
-  setValue: (value: number) => void;
+  returnValueCallback: (value: number) => void;
+  defaultValue?: number;
+  min?: number;
+  max?: number;
+  step?: number;
   disabled?: boolean;
 }) {
-  let [minRotation, maxRotation, sensitivity] = [-150, 150, 1.5];
-  const [yValue, setYValue] = useState<number>((value * 30) - 150);
+  let [minRotation, maxRotation, sensitivity] = [-150, 150, step];
+  const [yValue, setYValue] = useState<number>(defaultValueToYValueMapper(min, max, defaultValue));
   const visualRef = useRef<HTMLDivElement>(null);
   const indicatorRef = useRef<HTMLDivElement>(null);
 
+  // Sets knob to default value on initial render
   useEffect(() => {
     visualRef.current!.style.transform = `rotate(${yValue}deg)`;
   }, []);
@@ -55,17 +67,17 @@ export default function Knob({
     document.removeEventListener('mouseup', onEnd);
     document.removeEventListener('keydown', (event: KeyboardEvent) => {
       const keyName = event.key;
-      if (keyName === "Shift") { sensitivity = 1; }
+      if (keyName === "Shift") { sensitivity = 1 }
     });
     document.removeEventListener('keyup', (event: KeyboardEvent) => {
       const keyName = event.key;
-      if (keyName === "Shift") { sensitivity = 1.5; }
+      if (keyName === "Shift") { sensitivity = step }
     });
   }
 
   function removeInitListeners() {
     visualRef.current?.removeEventListener('mousedown', onStart);
-    visualRef.current?.removeEventListener('dblclick', () => setYValue(minRotation));
+    visualRef.current?.removeEventListener('dblclick', () => setYValue(defaultValueToYValueMapper(min, max, defaultValue)));
     document.removeEventListener('keydown', (event: KeyboardEvent) => {
       const keyName = event.key;
       if (keyName === "Shift") { sensitivity = 1; }
@@ -76,14 +88,11 @@ export default function Knob({
     });
   }
 
-  useEffect(() => {
-    visualRef.current!.style.transform = `rotate(${yValue}deg)`;
-  }, [yValue]);
-
+  // Inits start() function
   useEffect(() => {
     if (!disabled) {
-      visualRef.current!.addEventListener('mousedown', onStart);
-      visualRef.current!.addEventListener('dblclick', () => setYValue(minRotation));
+      visualRef.current?.addEventListener('mousedown', onStart);
+      visualRef.current?.addEventListener('dblclick', () => setYValue(defaultValueToYValueMapper(min, max, defaultValue)));
       document.addEventListener('keydown', (event: KeyboardEvent) => {
         const keyName = event.key;
         if (keyName === "Shift") { sensitivity = 1; }
@@ -102,6 +111,13 @@ export default function Knob({
     });
   }, [disabled]);
 
+  // Renders knob position, returns desired value
+  useEffect(() => {
+    visualRef.current!.style.transform = `rotate(${yValue}deg)`;
+    returnValueCallback(yValueMappedToMinMaxRange(min, max, yValue));
+    console.log("yvalue", yValue);
+  }, [yValue]);
+
   return (
     <div className='dial-container'>
       <div className='dial-label' style={{ color: !disabled ? "white" : "grey" }}>{label}</div>
@@ -113,4 +129,25 @@ export default function Knob({
       </div>
     </div>
   );
+}
+
+/**
+ * Maps knob position to the provided mix & max range
+ * @param: min: number
+ * @param: max: number
+ * @param: yValue: number
+ */
+function yValueMappedToMinMaxRange(min: number, max: number, yValue: number) {
+  return ((yValue + 150) / (300 / (max - min))) + min;
+}
+
+/**
+  * Maps the defaultValue prop to knob position
+  * @param: min: number
+  * @param: max: number
+  * @param: defaultValue: number
+  */
+function defaultValueToYValueMapper(min: number, max: number, defaultValue: number) {
+  const slope = (300 / (max - min));
+  return ((slope * defaultValue) - (150 + (slope * min)));
 }

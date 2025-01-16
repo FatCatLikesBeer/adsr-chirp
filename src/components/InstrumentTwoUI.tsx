@@ -82,11 +82,16 @@ export default function InstrumentTwoUi() {
   return (
     <div className="instrument">
       <VoiceOneOSC title="OSC 1" instrumentParams={instrumentParams.osc1Params} setInstrumentParams={setInstrumentValues} instrument={instrument} />
-      <VoiceOneAmpEnvelope
-        title="OSC 1 AMP ADSR"
-        instrumentParams={instrumentParams.osc1AmpEnvelope}
-        setInstrumentParams={setAmpOneEnvelope}
-        disabled={false}
+      {/* <VoiceOneAmpEnvelope */}
+      {/*   title="OSC 1 AMP ADSR" */}
+      {/*   instrumentParams={instrumentParams.osc1AmpEnvelope} */}
+      {/*   setInstrumentParams={setAmpOneEnvelope} */}
+      {/*   disabled={false} */}
+      {/* /> */}
+      <Knob
+        label="A"
+        defaultValue={2}
+        returnValueCallback={(_) => { }}
       />
       <button type="button" onMouseDown={createPlayKill} onMouseUp={release}>Play</button>
     </div>
