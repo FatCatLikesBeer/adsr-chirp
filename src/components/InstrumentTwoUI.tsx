@@ -20,8 +20,8 @@ export default function InstrumentTwoUi() {
       frequency: 554.36,
       volume: 0.3,
     },
-    osc1AmpEnvelope: [1, 1, 1, 1],
-    osc2AmpEnvelope: [1, 1, 1, 1],
+    osc1AmpEnvelope: [3, 2, 8, 4],
+    osc2AmpEnvelope: [3, 2, 8, 4],
     osc1Filter: {
       type: "allpass",
       frequency: 500,
@@ -57,6 +57,7 @@ export default function InstrumentTwoUi() {
 
   function createPlayKill() {
     instrument!.attack();
+    console.log("osc1AmpEnvelope", instrumentParams.osc1AmpEnvelope);
   }
 
   function release() {
@@ -82,16 +83,11 @@ export default function InstrumentTwoUi() {
   return (
     <div className="instrument">
       <VoiceOneOSC title="OSC 1" instrumentParams={instrumentParams.osc1Params} setInstrumentParams={setInstrumentValues} instrument={instrument} />
-      {/* <VoiceOneAmpEnvelope */}
-      {/*   title="OSC 1 AMP ADSR" */}
-      {/*   instrumentParams={instrumentParams.osc1AmpEnvelope} */}
-      {/*   setInstrumentParams={setAmpOneEnvelope} */}
-      {/*   disabled={false} */}
-      {/* /> */}
-      <Knob
-        label="A"
-        defaultValue={2}
-        returnValueCallback={(_) => { }}
+      <VoiceOneAmpEnvelope
+        title="OSC 1 AMP ADSR"
+        instrumentParams={instrumentParams.osc1AmpEnvelope}
+        setInstrumentParams={setAmpOneEnvelope}
+        disabled={false}
       />
       <button type="button" onMouseDown={createPlayKill} onMouseUp={release}>Play</button>
     </div>

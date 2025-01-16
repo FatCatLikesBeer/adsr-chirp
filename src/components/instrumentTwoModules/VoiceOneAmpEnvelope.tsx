@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 import Knob from "./Knob.tsx";
 
 export default function VoiceOneAmpEnvelope({
@@ -11,7 +13,12 @@ export default function VoiceOneAmpEnvelope({
   title: string;
   disabled: boolean;
 }) {
+  let key: number;
   const labels = ["A", "D", "S", "R"];
+
+  useEffect(() => {
+    key = Math.random() * 10000000;
+  }, []);
 
   return (
     <div className="module_amp">
@@ -23,14 +30,20 @@ export default function VoiceOneAmpEnvelope({
         <div className="knob_group">
           {instrumentParams.map((element, i) => {
 
-            function setValue(yValue: number) {
-              let newEnvelope = [...instrumentParams];
-              newEnvelope[i] = yValue;
-              setInstrumentParams([...newEnvelope]);
+            function knobCallBack(value: number) {
+              const newInstrumentParams = [...instrumentParams];
+              newInstrumentParams[i] = value;
+              setInstrumentParams(newInstrumentParams);
             }
 
             return (
-              <Knob label={labels[i]} disabled={disabled} key={Math.random() * 1000} setValue={setValue} value={element} />
+              <Knob
+                key={`${key}${labels[i]}`}
+                label={labels[i]}
+                callBackFunction={knobCallBack}
+                defaultValue={element}
+                disabled={disabled}
+              />
             );
           })}
         </div>

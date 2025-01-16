@@ -3,7 +3,7 @@ import { useRef, useEffect, useState } from 'react';
 /**
  * Knob/Dial element for ADSR/Envelope
  * @prop {string} label - its the label above the knob
- * @prop {function} returnValueCallback - Callback to get value of knob
+ * @prop {function} callBackFunction - Callback to get value of knob
  * @prop {number} [defaultValue = 1] - defaulted to 1. Default value of the knob
  * @prop {number} [min = 0] - minimum of range, defaulted to 0
  * @prop {number} [max = 10] - maximum of range, defaulted to 10
@@ -12,7 +12,7 @@ import { useRef, useEffect, useState } from 'react';
  */
 export default function Knob({
   label,
-  returnValueCallback,
+  callBackFunction,
   defaultValue = 1,
   min = 0,
   max = 10,
@@ -20,7 +20,7 @@ export default function Knob({
   disabled = false,
 }: {
   label: string;
-  returnValueCallback: (value: number) => void;
+  callBackFunction: (value: number) => void;
   defaultValue?: number;
   min?: number;
   max?: number;
@@ -114,8 +114,7 @@ export default function Knob({
   // Renders knob position, returns desired value
   useEffect(() => {
     visualRef.current!.style.transform = `rotate(${yValue}deg)`;
-    returnValueCallback(yValueMappedToMinMaxRange(min, max, yValue));
-    console.log("yvalue", yValue);
+    callBackFunction(yValueMappedToMinMaxRange(min, max, yValue));
   }, [yValue]);
 
   return (
