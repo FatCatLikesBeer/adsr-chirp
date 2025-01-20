@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import InstrumentTwo from '../library/InstrumentTwo';
 import VoiceOneOSC from "./instrumentTwoModules/VoiceOneOSC";
 import VoiceOneAmpEnvelope from "./instrumentTwoModules/VoiceOneAmpEnvelope.tsx";
@@ -9,6 +9,8 @@ import Knob from "./instrumentTwoModules/Knob"; Knob
  * User Interface for InstrumentOne
  */
 export default function InstrumentTwoUi() {
+  const playRef = useRef<HTMLButtonElement>(null);
+  const instrumentParamRef = useRef<InstrumentTwoParams | null>(null);
   const [instrumentParams, setInstrumentParams] = useState<InstrumentTwoParams>({
     osc1Params: {
       type: "sine",
@@ -20,8 +22,8 @@ export default function InstrumentTwoUi() {
       frequency: 554.36,
       volume: 0.3,
     },
-    osc1AmpEnvelope: [3, 2, 8, 4],
-    osc2AmpEnvelope: [3, 2, 8, 4],
+    osc1AmpEnvelope: [3, 2, 2, 4],
+    osc2AmpEnvelope: [3, 2, 2, 4],
     osc1Filter: {
       type: "allpass",
       frequency: 500,
@@ -53,20 +55,31 @@ export default function InstrumentTwoUi() {
       target: "none",
     },
   });
-  const [instrument] = useState<InstrumentTwo>(new InstrumentTwo(instrumentParams));
+  const [instrument, setInstrument] = useState<InstrumentTwo>(new InstrumentTwo(instrumentParams));
+  const instrumentRef = useRef<InstrumentTwo | null>(null);
+
+  useEffect(() => {
+    instrumentParamRef.current = instrumentParams;
+    instrumentRef.current = instrument;
+  }, [instrumentParams]);
 
   function createPlayKill() {
-    instrument!.attack();
-    console.log("osc1AmpEnvelope", instrumentParams.osc1AmpEnvelope);
+    if (instrumentParamRef.current && instrumentRef.current) {
+      const newInstrument = new InstrumentTwo(instrumentParamRef.current);
+      setInstrument(newInstrument);
+      instrumentRef.current.attack();
+    }
   }
 
   function release() {
-    instrument!.synth.triggerRelease();
+    if (instrumentRef.current) {
+      instrumentRef.current.release();
+    }
   }
 
-  function setInstrumentValues(values: any): undefined {
-    let newInstrumentParams = { ...instrumentParams, values }
-    setInstrumentParams({ ...newInstrumentParams });
+  function setInstrumentValues(nestedValues: any): undefined {
+    let newInstrumentParams = { ...instrumentParams, nestedValues }
+    setInstrumentParams(newInstrumentParams);
   }
 
   function setAmpOneEnvelope(newValues: number[]) {
@@ -75,21 +88,41 @@ export default function InstrumentTwoUi() {
     setInstrumentParams(newParams);
   };
 
+  // useEffect(() => {
+  //   const myComment = "<!-- InstrumentTwo -->\n<!-- Thank you for the dial saltofthemar https://marlotron.saltofthemar.ca/ -->";
+  //   console.log(myComment);
+  //   window.document.body.insertAdjacentHTML("beforeend", myComment);
+  // }, []);
+
   useEffect(() => {
-    const myComment = "<!-- InstrumentTwo -->\n<!-- Thank you for the dial saltofthemar https://marlotron.saltofthemar.ca/ -->";
-    document.body.insertAdjacentHTML("beforeend", myComment);
+    const playButton = playRef.current;
+
+    playButton?.addEventListener('mousedown', createPlayKill);
+    playButton?.addEventListener('mouseup', release);
+    return (
+      () => {
+        playButton?.removeEventListener('mousedown', createPlayKill);
+        playButton?.removeEventListener('mouseup', release);
+      }
+    );
   }, []);
 
   return (
     <div className="instrument">
-      <VoiceOneOSC title="OSC 1" instrumentParams={instrumentParams.osc1Params} setInstrumentParams={setInstrumentValues} instrument={instrument} />
-      <VoiceOneAmpEnvelope
-        title="OSC 1 AMP ADSR"
-        instrumentParams={instrumentParams.osc1AmpEnvelope}
-        setInstrumentParams={setAmpOneEnvelope}
-        disabled={false}
-      />
-      <button type="button" onMouseDown={createPlayKill} onMouseUp={release}>Play</button>
+      <div className="instrument_voice">
+        <VoiceOneOSC
+          title="OSC 1"
+          instrumentParams={instrumentParams.osc1Params}
+          setInstrumentParams={setInstrumentValues}
+        />
+        <VoiceOneAmpEnvelope
+          title="OSC 1 AMP ADSR"
+          instrumentParams={instrumentParams.osc1AmpEnvelope}
+          setInstrumentParams={setAmpOneEnvelope}
+          disabled={false}
+        />
+      </div>
+      <button type="button" ref={playRef}>Play</button>
     </div>
   );
 }

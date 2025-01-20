@@ -11,6 +11,7 @@ function App() {
 
 export default App
 
-// TODO: Knob 😩
+// TODO: In VoiceOneOSC, UI behaviors should be CallBack functions instead of direct function definitions
+// TODO: Send InstrumentTwoParams to InstrumentTwo
 // TODO: Oscilliscope
 // TODO: Change favicon
