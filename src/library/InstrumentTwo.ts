@@ -1,5 +1,5 @@
 import * as Tone from "tone";
-import { InstrumentTwoParams } from "../t";
+import { InstrumentTwoParams, lfoParams2 } from "../t";
 
 /**
  * Tone.js Instrument: InstrumentTwo
@@ -9,13 +9,13 @@ export default class InstrumentTwo {
   instrumentSettings: InstrumentTwoParams;
   now: any;
   synth1: Tone.Synth;
-  // synth2: Tone.Synth;
+  synth2: Tone.Synth;
   LFO1: Tone.LFO;
   LFO2: Tone.LFO;
   LFO3: Tone.LFO;
   LFO4: Tone.LFO;
-  // filter1: Tone.BiquadFilter;
-  // filter2: Tone.BiquadFilter;
+  filter1: Tone.Filter;
+  filter2: Tone.Filter;
 
   constructor(instrumentParams: InstrumentTwoParams) {
     this.instrumentSettings = instrumentParams;
@@ -30,6 +30,21 @@ export default class InstrumentTwo {
         decayCurve: "exponential",
         sustain: this.instrumentSettings.osc1AmpEnvelope[2] / 10,
         release: this.instrumentSettings.osc1AmpEnvelope[3],
+        releaseCurve: "exponential",
+      }
+    }).toDestination()
+
+    this.synth2 = new Tone.Synth({
+      oscillator: {
+        type: this.instrumentSettings.osc2Params.type,
+      },
+      envelope: {
+        attack: this.instrumentSettings.osc2AmpEnvelope[0],
+        attackCurve: "linear",
+        decay: this.instrumentSettings.osc2AmpEnvelope[1],
+        decayCurve: "exponential",
+        sustain: this.instrumentSettings.osc2AmpEnvelope[2] / 10,
+        release: this.instrumentSettings.osc2AmpEnvelope[3],
         releaseCurve: "exponential",
       }
     }).toDestination()
@@ -62,6 +77,8 @@ export default class InstrumentTwo {
       type: this.instrumentSettings.LFOFour.type,
     }).start();
 
+    this.filter1 = new Tone.Filter();
+    this.filter2 = new Tone.Filter();
 
     this.attack = this.attack.bind(this);
     this.release = this.release.bind(this);
@@ -82,5 +99,46 @@ export default class InstrumentTwo {
 
   script() {
     this.synth1.triggerAttackRelease(this.instrumentSettings.osc1Params.frequency, 0.6, 0, this.instrumentSettings.osc1Params.volume);
+  }
+
+  setLFOParams(LFO: Tone.LFO, LFOParams: lfoParams2) {
+    LFO.set({
+      frequency: LFOParams.frequency,
+      type: LFOParams.type,
+    });
+  }
+
+  routeLFO(LFO: Tone.LFO, LFOParams: lfoParams2) {
+    LFO.disconnect();
+    switch (LFOParams.target) {
+      case "none":
+        break;
+      case "OSC 1 Frequency":
+        LFO.connect(this.synth1.frequency);
+        break;
+      case "OSC 2 Frequency":
+        LFO.connect(this.synth2.frequency);
+        break;
+      case "OSC 1 Amplitude":
+        LFO.connect(this.synth1.volume);
+        break;
+      case "OSC 2 Amplitude":
+        LFO.connect(this.synth2.volume);
+        break;
+      case "Filter 1 Cutoff":
+        LFO.connect(this.filter1.frequency);
+        break;
+      case "Filter 2 Cutoff":
+        LFO.connect(this.filter2.frequency);
+        break;
+      case "Filter 1 Q":
+        console.log("Filter 1 Routing not yet implemented");
+        break;
+      case "Filter 2 Q":
+        console.log("Filter 2 Routing not yet implemented");
+        break;
+      default:
+        break;
+    }
   }
 }
