@@ -11,12 +11,21 @@ import { NonCustomOscillatorType } from "tone/build/esm/source/oscillator/Oscill
  * @property LFOOne - lfoParams
  * @property LFOTwo - lfoParams
  * @property LFOThree - lfoParams
+ * @property LFOFour - lfoParams
  */
 interface InstrumentTwoParams extends InstrumentOneParams {
   /** Type and Frequency for OSC 1 */
   osc1Params: oscParams2;
   /** Type and Frequency for OSC 2 */
   osc2Params: oscParams2;
+  /** Type, Frequency, and Amplitude for OSC LFO 1 */
+  LFOOne: lfoParams2;
+  /** Type, Frequency, and Amplitude for OSC LFO 2 */
+  LFOTwo: lfoParams2;
+  /** Type, Frequency, and Amplitude for OSC LFO 3 */
+  LFOThree: lfoParams2;
+  /** Type, Frequency, and Amplitude for OSC LFO 4 */
+  LFOFour: lfoParams2;
 }
 
 /**
@@ -52,7 +61,7 @@ interface InstrumentOneParams {
   LFOOne: lfoParams;
   /** Type, Frequency, and Amplitude for OSC LFO 2 */
   LFOTwo: lfoParams;
-  /** Type, Frequency, and Amplitude for OSC LFO 1 */
+  /** Type, Frequency, and Amplitude for OSC LFO 3 */
   LFOThree: lfoParams;
 }
 
@@ -63,8 +72,9 @@ interface oscParams {
   volume: number;
 }
 
+/** Oscillator Parameters */
 interface oscParams2 extends oscParams {
-  type: NonCustomOscillatorType;
+  type: Tone.OscillatorType;
 }
 
 /** Filter Parameters */
@@ -80,6 +90,10 @@ type lfoParams = {
   frequency: number;
   amplitude: number;
   target: ModulationTarget;
+}
+
+interface lfoParams2 extends lfoParams {
+  type: Tone.OscillatorType;
 }
 
 /**

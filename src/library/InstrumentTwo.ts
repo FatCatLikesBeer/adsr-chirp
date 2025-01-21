@@ -1,19 +1,19 @@
 import * as Tone from "tone";
-import { InstrumentOneParams, InstrumentTwoParams } from "../t";
+import { InstrumentTwoParams } from "../t";
 
 /**
  * Tone.js Instrument: InstrumentTwo
  * @params none
  */
 export default class InstrumentTwo {
-  instrumentSettings: InstrumentOneParams;
+  instrumentSettings: InstrumentTwoParams;
   now: any;
   synth1: Tone.Synth;
   // synth2: Tone.Synth;
   LFO1: Tone.LFO;
-  // LFO2: Tone.LFO;
-  // LFO3: Tone.LFO;
-  // LFO4: Tone.LFO;
+  LFO2: Tone.LFO;
+  LFO3: Tone.LFO;
+  LFO4: Tone.LFO;
   // filter1: Tone.BiquadFilter;
   // filter2: Tone.BiquadFilter;
 
@@ -38,8 +38,30 @@ export default class InstrumentTwo {
       frequency: 4,
       min: this.instrumentSettings.osc1Params.frequency - 50,
       max: this.instrumentSettings.osc1Params.frequency + 50,
-      type: "sine",
+      type: this.instrumentSettings.LFOOne.type,
     }).connect(this.synth1.frequency).start();
+
+    this.LFO2 = new Tone.LFO({
+      frequency: 5,
+      min: this.instrumentSettings.osc1Params.frequency - 100,
+      max: this.instrumentSettings.osc1Params.frequency + 100,
+      type: this.instrumentSettings.LFOTwo.type,
+    }).start();
+
+    this.LFO3 = new Tone.LFO({
+      frequency: 6,
+      min: this.instrumentSettings.osc1Params.frequency - 100,
+      max: this.instrumentSettings.osc1Params.frequency + 100,
+      type: this.instrumentSettings.LFOThree.type,
+    }).start();
+
+    this.LFO4 = new Tone.LFO({
+      frequency: 7,
+      min: this.instrumentSettings.osc1Params.frequency - 100,
+      max: this.instrumentSettings.osc1Params.frequency + 100,
+      type: this.instrumentSettings.LFOFour.type,
+    }).start();
+
 
     this.attack = this.attack.bind(this);
     this.release = this.release.bind(this);
@@ -47,6 +69,9 @@ export default class InstrumentTwo {
   }
 
   attack() {
+    if (Tone.getContext().rawContext.state === "suspended") {
+      Tone.start();
+    }
     this.now = Tone.now();
     this.synth1.triggerAttack(this.instrumentSettings.osc1Params.frequency, this.now, this.instrumentSettings.osc1Params.volume);
   }

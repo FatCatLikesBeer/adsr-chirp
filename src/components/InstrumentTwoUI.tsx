@@ -2,15 +2,16 @@ import { useEffect, useState, useRef } from "react";
 import InstrumentTwo from '../library/InstrumentTwo';
 import VoiceOneOSC from "./instrumentTwoModules/VoiceOneOSC";
 import VoiceOneAmpEnvelope from "./instrumentTwoModules/VoiceOneAmpEnvelope.tsx";
-import { InstrumentTwoParams } from "../t";
 import Knob from "./instrumentTwoModules/Knob"; Knob
 
+import { InstrumentTwoParams } from "../t";
+import { NonCustomOscillatorType } from "tone/build/esm/source/oscillator/OscillatorInterface";
+
 /**
- * User Interface for InstrumentOne
+ * User Interface for InstrumentTwo
  */
 export default function InstrumentTwoUi() {
   const playRef = useRef<HTMLButtonElement>(null);
-  const instrumentParamRef = useRef<InstrumentTwoParams | null>(null);
   const [instrumentParams, setInstrumentParams] = useState<InstrumentTwoParams>({
     osc1Params: {
       type: "sine",
@@ -43,21 +44,29 @@ export default function InstrumentTwoUi() {
       target: "none",
     },
     LFOTwo: {
-      type: "sine",
+      type: "square",
       frequency: 2,
       amplitude: 1,
       target: "none",
     },
     LFOThree: {
-      type: "sine",
+      type: "triangle",
+      frequency: 2,
+      amplitude: 1,
+      target: "none",
+    },
+    LFOFour: {
+      type: "sine3",
       frequency: 2,
       amplitude: 1,
       target: "none",
     },
   });
+  const instrumentParamRef = useRef<InstrumentTwoParams>(instrumentParams);
   const [instrument, setInstrument] = useState<InstrumentTwo>(new InstrumentTwo(instrumentParams));
-  const instrumentRef = useRef<InstrumentTwo | null>(null);
+  const instrumentRef = useRef<InstrumentTwo>(instrument);
 
+  // Update refs when instrument params change
   useEffect(() => {
     instrumentParamRef.current = instrumentParams;
     instrumentRef.current = instrument;
@@ -88,21 +97,21 @@ export default function InstrumentTwoUi() {
     setInstrumentParams(newParams);
   };
 
-  // useEffect(() => {
-  //   const myComment = "<!-- InstrumentTwo -->\n<!-- Thank you for the dial saltofthemar https://marlotron.saltofthemar.ca/ -->";
-  //   console.log(myComment);
-  //   window.document.body.insertAdjacentHTML("beforeend", myComment);
-  // }, []);
+  function handleOsc1WaveTypeChange(event: React.ChangeEvent<HTMLSelectElement>) {
+    const waveType = event.target.value as NonCustomOscillatorType;
+    let newInstrumentParams = { ...instrumentParams };
+    newInstrumentParams.osc1Params.type = waveType;
+    setInstrumentParams(newInstrumentParams);
+  }
 
   useEffect(() => {
     const playButton = playRef.current;
-
     playButton?.addEventListener('mousedown', createPlayKill);
-    playButton?.addEventListener('mouseup', release);
+    window.document.addEventListener('mouseup', release);
     return (
       () => {
         playButton?.removeEventListener('mousedown', createPlayKill);
-        playButton?.removeEventListener('mouseup', release);
+        window.document.removeEventListener('mouseup', release);
       }
     );
   }, []);
@@ -112,6 +121,7 @@ export default function InstrumentTwoUi() {
       <div className="instrument_voice">
         <VoiceOneOSC
           title="OSC 1"
+          waveTypeCallBack={handleOsc1WaveTypeChange}
           instrumentParams={instrumentParams.osc1Params}
           setInstrumentParams={setInstrumentValues}
         />

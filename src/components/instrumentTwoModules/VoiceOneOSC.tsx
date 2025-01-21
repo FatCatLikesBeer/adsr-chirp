@@ -6,10 +6,16 @@ export default function VoiceOneOSC({
   instrumentParams,
   setInstrumentParams,
   title,
+  waveTypeCallBack,
+  frequencyCallBack,
+  volumeCallBack,
 }: {
   instrumentParams: oscParams2;
   setInstrumentParams: (_value: any) => void;
   title: string;
+  waveTypeCallBack: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+  frequencyCallBack?: (value: number) => void;
+  volumeCallBack?: (value: number) => void;
 }) {
   const [frequencyIsEditable, setFrequencyIsEditable] = useState(false);
   const frequencyElementRef = useRef<HTMLInputElement>(null);
@@ -99,7 +105,7 @@ export default function VoiceOneOSC({
       <div style={{ marginTop: "0rem", display: "flex", flexDirection: "column", justifyContent: "space-evenly", height: "100%" }}>
         <div style={{ display: "flex", flexDirection: "column" }}>
           <h3 className="slider_label">Wave Shape</h3>
-          <select name="wave-shape" onChange={handleWaveTypeChange} defaultValue={instrumentParams.type}>
+          <select name="wave-shape" onChange={waveTypeCallBack} defaultValue={instrumentParams.type}>
             {waveTables.map((type) => {
               return (
                 <option value={type.toLowerCase()} key={`${type.toLowerCase()}wave-shape`}>{type}</option>
