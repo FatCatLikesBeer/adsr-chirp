@@ -18,6 +18,7 @@ export default class InstrumentTwo {
   filter2: Tone.Filter;
 
   constructor(instrumentParams: InstrumentTwoParams) {
+    // Create & init nodes
     this.instrumentSettings = instrumentParams;
     this.synth1 = new Tone.Synth({
       oscillator: {
@@ -80,9 +81,11 @@ export default class InstrumentTwo {
     this.filter1 = new Tone.Filter();
     this.filter2 = new Tone.Filter();
 
+    // Bind internal methods where appropriate
     this.attack = this.attack.bind(this);
     this.release = this.release.bind(this);
     this.script = this.script.bind(this);
+    this.routeLFO = this.routeLFO.bind(this);
   }
 
   attack() {
@@ -101,6 +104,13 @@ export default class InstrumentTwo {
     this.synth1.triggerAttackRelease(this.instrumentSettings.osc1Params.frequency, 0.6, 0, this.instrumentSettings.osc1Params.volume);
   }
 
+  /**
+   * Sets Frequency and Type to selected LFO node
+   * @param {Tone.LFO} LFO - The LFO node to set
+   * @param {lfoParams2} LFOParams - LFO Param group containing target node
+   * @example
+   * setLFOParams(this.LFOOne, this.instrumentSettings.LFOOne)
+   */
   setLFOParams(LFO: Tone.LFO, LFOParams: lfoParams2) {
     LFO.set({
       frequency: LFOParams.frequency,
@@ -108,6 +118,12 @@ export default class InstrumentTwo {
     });
   }
 
+  /**
+   * Routes selected LFO node to target
+   * @param {Tone.LFO} LFO - The LFO node to set
+   * @param {lfoParams2} LFOParams - LFO params containing target node
+   * @example routeLFO(this.LFOOne, this.instrumentSettings.LFOOne)
+   */
   routeLFO(LFO: Tone.LFO, LFOParams: lfoParams2) {
     LFO.disconnect();
     switch (LFOParams.target) {

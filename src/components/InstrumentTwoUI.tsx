@@ -116,6 +116,10 @@ export default function InstrumentTwoUi() {
     );
   }, []);
 
+  useEffect(() => {
+    instrument.routeLFO(instrument.LFO1, instrumentParams.LFOOne);
+  }, []);
+
   return (
     <div className="instrument">
       <div className="instrument_voice">

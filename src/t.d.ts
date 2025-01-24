@@ -2,16 +2,16 @@ import { NonCustomOscillatorType } from "tone/build/esm/source/oscillator/Oscill
 
 /**
  * Instrument Two Parameters
- * @property osc1Params - oscParams
- * @property osc2Params - oscParams
- * @property osc1AmpEnvelope - number[]
- * @property osc2AmpEnvelope - number[]
- * @property osc1Filter - oscFilter
- * @property osc2Filter - oscFilter
- * @property LFOOne - lfoParams
- * @property LFOTwo - lfoParams
- * @property LFOThree - lfoParams
- * @property LFOFour - lfoParams
+ * @property {oscParams2} osc1Params - Parameters for oscillator 1
+ * @property {oscParams2} osc2Params - Parameters for oscillator 2
+ * @property {number[]} osc1AmpEnvelope - ADSR for osc 1 amp
+ * @property {number[]} osc2AmpEnvelope - ADSR for osc 2 amp
+ * @property {oscFilter} osc1Filter - Params for filter 1
+ * @property {oscFilter} osc2Filter - Params for filter 2
+ * @property {lfoParams2} LFOOne - Params for LFO1
+ * @property {lfoParams2} LFOTwo - Params for LFO2
+ * @property {lfoParams2} LFOThree - Params for LFO3
+ * @property {lfoParams2} LFOFour - Params for LFO4
  */
 interface InstrumentTwoParams extends InstrumentOneParams {
   /** Type and Frequency for OSC 1 */
@@ -30,15 +30,15 @@ interface InstrumentTwoParams extends InstrumentOneParams {
 
 /**
  * Instrument One Parameters
- * @property osc1Params - oscParams
- * @property osc2Params - oscParams
- * @property osc1AmpEnvelope - number[]
- * @property osc2AmpEnvelope - number[]
- * @property osc1Filter - oscFilter
- * @property osc2Filter - oscFilter
- * @property LFOOne - lfoParams
- * @property LFOTwo - lfoParams
- * @property LFOThree - lfoParams
+ * @property {oscParams} osc1Params - Parameters for oscillator 1
+ * @property {oscParams} osc2Params - Parameters for oscillator 2
+ * @property {number[]} osc1AmpEnvelope - ADSR for osc 1 amp
+ * @property {number[]} osc2AmpEnvelope - ADSR for osc 2 amp
+ * @property {oscfilter} osc1Filter - Params for filter 1
+ * @property {oscfilter} osc2Filter - Params for filter 2
+ * @property {lfoParams} LFOOne - Params for LFO1
+ * @property {lfoParams} LFOTwo - Params for LFO2
+ * @property {lfoParams} LFOThree - Params for LFO3
  */
 interface InstrumentOneParams {
   /** Type and Frequency for OSC 1 */
@@ -65,26 +65,59 @@ interface InstrumentOneParams {
   LFOThree: lfoParams;
 }
 
-/** Oscillator Parameters */
+/**
+ * Oscillator Parameters
+ *
+ * shape: {
+ *  type: OscillatorType,
+ *  frequency: number,
+ *  q: number,
+ * }
+ */
 interface oscParams {
   type: OscillatorType;
   frequency: number;
   volume: number;
 }
 
-/** Oscillator Parameters */
+/**
+ * Oscillator Parameters for InstrumentTwo
+ *
+ * shape: {
+ *  type: Tone.OscillatorType,
+ *  frequency: number,
+ *  q: number,
+ * }
+ */
 interface oscParams2 extends oscParams {
   type: Tone.OscillatorType;
 }
 
-/** Filter Parameters */
+/**
+ * Filter Parameters
+ *
+ * shape: {
+ *  type: BiquadFilterType,
+ *  frequency: number,
+ *  q: number,
+ * }
+ */
 type oscFilter = {
   type: BiquadFilterType;
   frequency: number;
   q: number;
 }
 
-/** LFO Parameters */
+/**
+ * LFO Parameters
+ *
+ * shape: {
+ *  type: OscillatorTyp,
+ *  Frequency: number,
+ *  amplitude: number,
+ *  target: ModulationTarget,
+ * }
+ */
 type lfoParams = {
   type: OscillatorType;
   frequency: number;
@@ -92,12 +125,32 @@ type lfoParams = {
   target: ModulationTarget;
 }
 
+/**
+ * LFO Parameters for InstrumentTwo
+ *
+ * shape: {
+ *  type: Tone.OscillatorType,
+ *  Frequency: number,
+ *  amplitude: number,
+ *  target: ModulationTarget,
+ * }
+ */
 interface lfoParams2 extends lfoParams {
   type: Tone.OscillatorType;
 }
 
 /**
  * Targets for LFO Or Envelope/ADSR Modulation
+ *
+ * @value {string} "OSC 1 Frequency"
+ * @value {string} "OSC 1 amplitude"
+ * @value {string} "OSC 2 Frequency"
+ * @value {string} "OSC 2 amplitude"
+ * @value {string} "Filter 1 Cutoff"
+ * @value {string} "Filter 2 Cutoff"
+ * @value {string} "Filter 1 Q"
+ * @value {string} "Filter 2 Q"
+ * @value {string} "none"
  */
 type ModulationTarget =
   "OSC 1 Frequency" | "OSC 2 Frequency" |
